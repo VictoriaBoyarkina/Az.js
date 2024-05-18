@@ -15,6 +15,7 @@
       if (fileOpen) {
         try {
           const blob =  await fileOpen(url, { mimeTypes: ['text/*'] });
+          console.log(blob);
           if (responseType == 'json') {
             callback(null, JSON.parse(blob));
           } else if (responseType == 'arraybuffer') {
