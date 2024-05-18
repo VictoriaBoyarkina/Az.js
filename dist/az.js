@@ -13,28 +13,27 @@
   var Az = {
       load: async function(url, responseType, callback) {
       if (fileOpen) {
-        await fileOpen(url, { mimeTypes: ['text/*'] }, function (err, data) {
-          if (err) {
-            callback(err);
-            return;
-          }
-
+        try {
+          const blob =  await fileOpen(url, { mimeTypes: ['text/*'] });
           if (responseType == 'json') {
-            callback(null, JSON.parse(data));
-          } else
-          if (responseType == 'arraybuffer') {
-            if (data.buffer) {
-              callback(null, data.buffer);
+            callback(null, JSON.parse(blob));
+          } else if (responseType == 'arraybuffer') {
+            if (blob.buffer) {
+              callback(null, blob.buffer);
             } else {
-              var ab = new ArrayBuffer(data.length);
+              var ab = new ArrayBuffer(blob.length);
               var view = new Uint8Array(ab);
-              for (var i = 0; i < data.length; ++i) {
-                  view[i] = data[i];
+              for (var i = 0; i < blob.length; ++i) {
+                  view[i] = blob[i];
               }
               callback(null, ab);
             }
           } else {
             callback(new Error('Unknown responseType'));
+          }                   }
+          catch (err) {
+            callback(err);
+            return;
           }
         });
         return;
