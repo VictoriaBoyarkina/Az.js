@@ -8,6 +8,7 @@
      var {
       fileOpen
     } = require('browser-fs-access');
+    console.log('Hi');
   }
 
   var Az = {
