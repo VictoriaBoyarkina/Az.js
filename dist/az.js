@@ -5,13 +5,15 @@
 }(this, function () { 'use strict';
   /** @namespace Az **/
   if (typeof require != 'undefined' && typeof exports === 'object' && typeof module !== 'undefined') {
-    var fs = require('fs');
+     var {
+      fileOpen
+    } = require('browser-fs-access');
   }
 
   var Az = {
-    load: function(url, responseType, callback) {
-      if (fs) {
-        fs.readFile(url, { encoding: responseType == 'json' ? 'utf8' : null }, function (err, data) {
+      load: async function(url, responseType, callback) {
+      if (fileOpen) {
+        await fileOpen(url, { mimeTypes: ['text/*'] }, function (err, data) {
           if (err) {
             callback(err);
             return;
