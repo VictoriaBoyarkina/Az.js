@@ -17,14 +17,10 @@
           // console.log('JSON File Contents:', jsonData);
           callback(null, jsonData);
         } else if (responseType == 'arraybuffer') {
-          console.log('arraybuffer')
           const arrayBuffer = await response.arrayBuffer();
-          console.log('Array buffer contents:', arrayBuffer);
             if (arrayBuffer) {
-              console.log('Array buffer Contents:', arrayBuffer);
               callback(null, arrayBuffer);
             } else {
-              console.log('???')
               var ab = new ArrayBuffer(response.length);
               var view = new Uint8Array(ab);
               for (var i = 0; i < response.length; ++i) {
