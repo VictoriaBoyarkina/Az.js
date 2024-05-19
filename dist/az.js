@@ -5,12 +5,13 @@
 }(this, function () { 'use strict';
   /** @namespace Az **/
   if (typeof require != 'undefined' && typeof exports === 'object' && typeof module !== 'undefined') {
-    var fs = require('fs-web');
+    var { fs } = require('fs-web');
   }
 
   var Az = {
     load: async function(url, responseType, callback) {
       if (fs) {
+        console.log('hi!')
         try {
           const response = await fileOpen(url)
           if (responseType == 'json') {
