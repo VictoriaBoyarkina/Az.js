@@ -10,9 +10,8 @@
 
   var Az = {
     load: async function(url, responseType, callback) {
-      console.log('h1')
       try {
-        const response = await fileOpen(url)
+        const response = await fetch(url);
         if (responseType == 'json') {
           const jsonData = await response.json();
           console.log('JSON File Contents:', jsonData);
@@ -25,14 +24,15 @@
           console.log('JSON File Contents:', jsonData);
           callback(null, arrayBuffer);
         } else {
+          console.log('Unknown responseType')
           callback(new Error('Unknown responseType'));
         }
       } catch (e) {
+        console.log(url)
+        console.log(e)
         callback(e);
         return;
       }
-      
-
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
       xhr.responseType = responseType;
