@@ -24,13 +24,13 @@
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-          console.log(response);
-
           if (responseType == "json") {
             callback(null, JSON.parse(response));
+            console.log(callback(null, JSON.parse(response)))
           } else if (responseType == "arraybuffer") {
             if (response.buffer) {
               callback(null, response.buffer);
+              console.log(callback(null, response.buffer))
             } else {
               var ab = new ArrayBuffer(response.length);
               var view = new Uint8Array(ab);
