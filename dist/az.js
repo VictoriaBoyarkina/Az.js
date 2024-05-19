@@ -18,19 +18,20 @@
   var Az = {
     load: async function (url, responseType, callback) {
       if (fs) {
-        console.log(url)
+        console.log(responseType)
         try {
           const response = await fetch(url);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           if (responseType == "json") {
+            console.log(JSON.parse(response));
             callback(null, JSON.parse(response));
             console.log(callback(null, JSON.parse(response)))
           } else if (responseType == "arraybuffer") {
             if (response.buffer) {
               callback(null, response.buffer);
-              console.log(callback(null, response.buffer))
+              console.log(response.buffer)
             } else {
               var ab = new ArrayBuffer(response.length);
               var view = new Uint8Array(ab);
