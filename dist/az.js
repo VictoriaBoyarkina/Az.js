@@ -17,15 +17,15 @@
           console.log('JSON File Contents:', jsonData);
           callback(null, jsonData);
         } else if (responseType == 'arraybuffer') {
-          const response = await fetch(url, { responseType: 'arraybuffer' });
           const arrayBuffer = await response.arrayBuffer();
             if (arrayBuffer) {
+              console.log('Array buffer Contents:', arrayBuffer);
               callback(null, arrayBuffer);
             } else {
               console.log('???')
               var ab = new ArrayBuffer(response.length);
               var view = new Uint8Array(ab);
-              for (var i = 0; i < responser.length; ++i) {
+              for (var i = 0; i < response.length; ++i) {
                   view[i] = responser[i];
               }
               callback(null, ab);
