@@ -14,10 +14,12 @@
         const response = await fetch(url);
         if (responseType == 'json') {
           const jsonData = await response.json();
-          console.log('JSON File Contents:', jsonData);
+          // console.log('JSON File Contents:', jsonData);
           callback(null, jsonData);
         } else if (responseType == 'arraybuffer') {
+          console.log('arraybuffer')
           const arrayBuffer = await response.arrayBuffer();
+          console.log('Array buffer contents:', arrayBuffer);
             if (arrayBuffer) {
               console.log('Array buffer Contents:', arrayBuffer);
               callback(null, arrayBuffer);
