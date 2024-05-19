@@ -17,12 +17,18 @@
           console.log('JSON File Contents:', jsonData);
           callback(null, jsonData);
         } else if (responseType == 'arraybuffer') {
+          const response = await fetch(filePath, { responseType: 'arraybuffer' });
           const arrayBuffer = await response.arrayBuffer();
-          const textDecoder = new TextDecoder('utf-8');
-          const jsonText = textDecoder.decode(arrayBuffer);
-          const jsonData = JSON.parse(jsonText);
-          console.log('JSON File Contents:', jsonData);
-          callback(null, arrayBuffer);
+            if (arrayBuffer.buffer) {
+              callback(null, arrayBuffer.buffer);
+            } else {
+              var ab = new ArrayBuffer(arrayBuffer.length);
+              var view = new Uint8Array(ab);
+              for (var i = 0; i < arrayBuffer.length; ++i) {
+                  view[i] = arrayBuffer[i];
+              }
+              callback(null, ab);
+            }
         } else {
           console.log('Unknown responseType')
           callback(new Error('Unknown responseType'));
