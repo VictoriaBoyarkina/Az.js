@@ -17,15 +17,16 @@
           console.log('JSON File Contents:', jsonData);
           callback(null, jsonData);
         } else if (responseType == 'arraybuffer') {
-          const response = await fetch(filePath, { responseType: 'arraybuffer' });
+          const response = await fetch(url, { responseType: 'arraybuffer' });
           const arrayBuffer = await response.arrayBuffer();
-            if (arrayBuffer.buffer) {
-              callback(null, arrayBuffer.buffer);
+            if (arrayBuffer) {
+              callback(null, arrayBuffer);
             } else {
-              var ab = new ArrayBuffer(arrayBuffer.length);
+              console.log('???')
+              var ab = new ArrayBuffer(response.length);
               var view = new Uint8Array(ab);
-              for (var i = 0; i < arrayBuffer.length; ++i) {
-                  view[i] = arrayBuffer[i];
+              for (var i = 0; i < responser.length; ++i) {
+                  view[i] = responser[i];
               }
               callback(null, ab);
             }
