@@ -4,36 +4,34 @@
   global.Az = factory()
 }(this, function () { 'use strict';
   /** @namespace Az **/
-  if (typeof require != 'undefined' && typeof exports === 'object' && typeof module !== 'undefined') {
-    var { fs } = require('fs-web');
-  }
+  // if (typeof require != 'undefined' && typeof exports === 'object' && typeof module !== 'undefined') {
+  //   var { fs } = require('fs-web');
+  // }
 
   var Az = {
     load: async function(url, responseType, callback) {
-      if (fs) {
-        console.log('hi!')
-        try {
-          const response = await fileOpen(url)
-          if (responseType == 'json') {
-            const jsonData = await response.json();
-            console.log('JSON File Contents:', jsonData);
-            callback(null, jsonData);
-          } else if (responseType == 'arraybuffer') {
-            const arrayBuffer = await response.arrayBuffer();
-            const textDecoder = new TextDecoder('utf-8');
-            const jsonText = textDecoder.decode(arrayBuffer);
-            const jsonData = JSON.parse(jsonText);
-            console.log('JSON File Contents:', jsonData);
-            callback(null, arrayBuffer);
-          } else {
-            callback(new Error('Unknown responseType'));
-          }
-        } catch (e) {
-          callback(e);
-          return;
+      console.log('h1')
+      try {
+        const response = await fileOpen(url)
+        if (responseType == 'json') {
+          const jsonData = await response.json();
+          console.log('JSON File Contents:', jsonData);
+          callback(null, jsonData);
+        } else if (responseType == 'arraybuffer') {
+          const arrayBuffer = await response.arrayBuffer();
+          const textDecoder = new TextDecoder('utf-8');
+          const jsonText = textDecoder.decode(arrayBuffer);
+          const jsonData = JSON.parse(jsonText);
+          console.log('JSON File Contents:', jsonData);
+          callback(null, arrayBuffer);
+        } else {
+          callback(new Error('Unknown responseType'));
         }
+      } catch (e) {
+        callback(e);
         return;
       }
+      
 
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
