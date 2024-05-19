@@ -5,7 +5,7 @@
 }(this, function () { 'use strict';
   /** @namespace Az **/
   if (typeof require != 'undefined' && typeof exports === 'object' && typeof module !== 'undefined') {
-    var fs = require('ds-web');
+    var fs = require('fs-web');
   }
 
   var Az = {
