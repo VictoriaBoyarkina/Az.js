@@ -4,40 +4,42 @@
   global.Az = factory()
 }(this, function () { 'use strict';
   /** @namespace Az **/
-  // if (typeof require != 'undefined' && typeof exports === 'object' && typeof module !== 'undefined') {
-  //   var { fs } = require('fs-web');
-  // }
+  if (typeof require != 'undefined' && typeof exports === 'object' && typeof module !== 'undefined') {
+    const fs = require('fs-web');
+  }
 
   var Az = {
     load: async function(url, responseType, callback) {
-      try {
-        const response = await fetch(url);
-        if (responseType == 'json') {
-          const jsonData = await response.json();
-          // console.log('JSON File Contents:', jsonData);
-          callback(null, jsonData);
-        } else if (responseType == 'arraybuffer') {
-          const arrayBuffer = await response.arrayBuffer();
-            if (arrayBuffer) {
-              callback(null, arrayBuffer);
-            } else {
-              var ab = new ArrayBuffer(response.length);
-              var view = new Uint8Array(ab);
-              for (var i = 0; i < response.length; ++i) {
-                  view[i] = responser[i];
+      if (fs) {
+        try {
+          const response = await fetch(url);
+          if (responseType == 'json') {
+            const jsonData = await response.json();
+            // console.log('JSON File Contents:', jsonData);
+            callback(null, jsonData);
+          } else if (responseType == 'arraybuffer') {
+            const arrayBuffer = await response.arrayBuffer();
+              if (arrayBuffer) {
+                callback(null, arrayBuffer);
+              } else {
+                console.log('???')
+                var ab = new ArrayBuffer(response);
+                var view = new Uint8Array(ab);
+                for (var i = 0; i < response.length; ++i) {
+                    view[i] = response[i];
+                }
+                callback(null, ab);
               }
-              callback(null, ab);
-            }
-        } else {
-          console.log('Unknown responseType')
-          callback(new Error('Unknown responseType'));
+            } else {
+            callback(new Error('Unknown responseType'));
+          }
+        } catch (e) {
+          callback(err);
+            return;
         }
-      } catch (e) {
-        console.log(url)
-        console.log(e)
-        callback(e);
         return;
       }
+
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
       xhr.responseType = responseType;
