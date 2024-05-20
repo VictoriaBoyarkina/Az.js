@@ -869,6 +869,7 @@
     } else {
       entries = dawg.findAll(word, config.replacements, config.stutter, config.typos);
     }
+    console.log(entries);
     return entries;
   }
 
@@ -1438,12 +1439,9 @@
   Morph.init = function(path, callback) {
     var loading = 0;
     var tagsInt, tagsExt;
-    console.log(`TAGSInt: ${tagsInt}`);
-    console.log(`TAGSExt: ${tagsExt}`);
     function loaded() {
       if (!--loading) {
         tags = Array(tagsInt.length);
-        console.log(`Tags: ${tags}`)
         for (var i = 0; i < tagsInt.length; i++) {
           tags[i] = new Tag(tagsInt[i]);
           tags[i].ext = new Tag(tagsExt[i]);
