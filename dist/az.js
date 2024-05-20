@@ -8,7 +8,7 @@
     const fs = require('fs-web');
   }
 
-  const Az = {
+  var Az = {
     load: async function(url, responseType, callback) {
       // Check if fetch is available
       if (typeof fetch !== 'undefined') {
