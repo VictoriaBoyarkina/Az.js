@@ -5,12 +5,11 @@
 }(this, function () { 'use strict';
   /** @namespace Az **/
   if (typeof require != 'undefined' && typeof exports === 'object' && typeof module !== 'undefined') {
-    const fs = require('fs-web');
+    var fs = require('fs');
   }
-  
+
   var Az = {
     load: async function(url, responseType, callback) {
-      if (fs) {
         try {
           const response = await fetch(url);
           if (responseType == 'json') {
@@ -35,9 +34,7 @@
           }
         } catch (e) {
           callback(err);
-            return;
-        }
-        return;
+          return;
       }
 
       var xhr = new XMLHttpRequest();
@@ -1551,26 +1548,24 @@
     loading++;
     Az.load(path + '/paradigms.array', 'arraybuffer', function(err, data) {
       if (err) {
-        console.error('Error loading data:', err);
+        callback(err);
         return;
       }
-      try {
-        var list = new Uint16Array(data);
-        var count = list[0];
-        var pos = 1;
-    
-        paradigms = [];
-        for (var i = 0; i < count; i++) {
-          var size = list[pos++];
-          paradigms.push(list.subarray(pos, pos + size));
-          pos += size;
-        }
-        loaded();
-      } catch (e) {
-        console.error('Error processing data:', e);
+      
+      var list = new Uint16Array(data),
+          count = list[0],
+          pos = 1;
+
+      paradigms = [];
+      for (var i = 0; i < count; i++) {
+        var size = list[pos++];
+        paradigms.push(list.subarray(pos, pos + size));
+        pos += size;
       }
+      loaded();
     });
   }
+
   return Morph;
 }));
 
