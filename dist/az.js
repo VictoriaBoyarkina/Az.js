@@ -861,7 +861,6 @@
 
   function lookup(dawg, word, config) {
     var entries;
-    console.log(`Dawg: ${dawg}`);
     if (config.typos == 'auto') {
       entries = dawg.findAll(word, config.replacements, config.stutter, 0);
       for (var i = 0; i < autoTypos.length && !entries.length && word.length > autoTypos[i]; i++) {
@@ -1439,9 +1438,12 @@
   Morph.init = function(path, callback) {
     var loading = 0;
     var tagsInt, tagsExt;
+    console.log(`TAGSInt: ${tagsInt}`);
+    console.log(`TAGSExt: ${tagsExt}`);
     function loaded() {
       if (!--loading) {
         tags = Array(tagsInt.length);
+        console.log(`Tags: ${tags}`)
         for (var i = 0; i < tagsInt.length; i++) {
           tags[i] = new Tag(tagsInt[i]);
           tags[i].ext = new Tag(tagsExt[i]);
