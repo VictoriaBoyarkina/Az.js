@@ -33,7 +33,7 @@
             callback(new Error('Unknown responseType'));
           }
         } catch (e) {
-          callback(err);
+          callback(e);
           return;
       }
 
