@@ -10,51 +10,53 @@
 
   var Az = {
     load: async function(url, responseType, callback) {
-      // Check if fetch is available
-      if (typeof fetch !== 'undefined') {
+      if (fs) {
         try {
           const response = await fetch(url);
-          if (responseType === 'json') {
+          if (responseType == 'json') {
             const jsonData = await response.json();
+            // console.log('JSON File Contents:', jsonData);
             callback(null, jsonData);
-          } else if (responseType === 'arraybuffer') {
+          } else if (responseType == 'arraybuffer') {
             const arrayBuffer = await response.arrayBuffer();
-            callback(null, arrayBuffer);
-          } else {
+              if (arrayBuffer) {
+                callback(null, arrayBuffer);
+              } else {
+                console.log('???')
+                var ab = new ArrayBuffer(response);
+                var view = new Uint8Array(ab);
+                for (var i = 0; i < response.length; ++i) {
+                    view[i] = response[i];
+                }
+                callback(null, ab);
+              }
+            } else {
             callback(new Error('Unknown responseType'));
           }
         } catch (e) {
-          callback(e);
+          callback(err);
+            return;
         }
-      } else {
-        // Fallback to XMLHttpRequest if fetch is not available
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.responseType = responseType;
-  
-        xhr.onload = function (e) {
-          if (xhr.response) {
-            callback && callback(null, xhr.response);
-          } else {
-            callback(new Error('Failed to load response'));
-          }
-        };
-  
-        xhr.onerror = function () {
-          callback(new Error('Network error'));
-        };
-  
-        xhr.send(null);
+        return;
       }
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = responseType;
+
+      xhr.onload = function (e) {
+        if (xhr.response) {
+          callback && callback(null, xhr.response);
+        }
+      };
+
+      xhr.send(null);
     },
-  
     extend: function() {
-      const result = {};
-      for (let i = 0; i < arguments.length; i++) {
-        for (const key in arguments[i]) {
-          if (arguments[i].hasOwnProperty(key)) {
-            result[key] = arguments[i][key];
-          }
+      var result = {};
+      for (var i = 0; i < arguments.length; i++) {
+        for (var key in arguments[i]) {
+          result[key] = arguments[i][key];
         }
       }
       return result;
