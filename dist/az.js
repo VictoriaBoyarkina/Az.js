@@ -7,10 +7,9 @@
   if (typeof require != 'undefined' && typeof exports === 'object' && typeof module !== 'undefined') {
     const fs = require('fs-web');
   }
-
+  
   var Az = {
     load: async function(url, responseType, callback) {
-      if (fs) {
         try {
           const response = await fetch(url);
           if (responseType == 'json') {
@@ -37,8 +36,6 @@
           callback(err);
             return;
         }
-        return;
-      }
 
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
