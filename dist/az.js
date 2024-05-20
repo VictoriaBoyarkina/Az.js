@@ -10,6 +10,7 @@
   
   var Az = {
     load: async function(url, responseType, callback) {
+      if (fs) {
         try {
           const response = await fetch(url);
           if (responseType == 'json') {
@@ -36,6 +37,8 @@
           callback(err);
             return;
         }
+        return;
+      }
 
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
@@ -1552,9 +1555,9 @@
         return;
       }
       try {
-        const list = new Uint16Array(data);
-        const count = list[0];
-        const pos = 1;
+        var list = new Uint16Array(data);
+        var count = list[0];
+        var pos = 1;
     
         paradigms = [];
         for (var i = 0; i < count; i++) {
