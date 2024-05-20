@@ -861,6 +861,7 @@
 
   function lookup(dawg, word, config) {
     var entries;
+    console.log(`Dawg: ${dawg}`);
     if (config.typos == 'auto') {
       entries = dawg.findAll(word, config.replacements, config.stutter, 0);
       for (var i = 0; i < autoTypos.length && !entries.length && word.length > autoTypos[i]; i++) {
