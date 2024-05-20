@@ -24,8 +24,18 @@
       } catch (err) {
         callback(err);
       }
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = responseType;
+
+      xhr.onload = function (e) {
+        if (xhr.response) {
+          callback && callback(null, xhr.response);
+        }
+      };
+
+      xhr.send(null);
     },
-  
     extend: function() {
       const result = {};
       for (let i = 0; i < arguments.length; i++) {
@@ -1531,10 +1541,6 @@
         const list = new Uint16Array(data);
         const count = list[0];
         const pos = 1;
-    
-        console.log('List:', list);
-        console.log('Count:', count);
-        console.log('Pos:', pos);
     
         paradigms = [];
         for (var i = 0; i < count; i++) {
