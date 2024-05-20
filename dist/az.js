@@ -10,42 +10,57 @@
 
   const Az = {
     load: async function(url, responseType, callback) {
-      try {
-        const response = await fetch(url);
-        if (responseType === 'json') {
-          const jsonData = await response.json();
-          callback(null, jsonData);
-        } else if (responseType === 'arraybuffer') {
-          const arrayBuffer = await response.arrayBuffer();
-          callback(null, arrayBuffer);
-        } else {
-          callback(new Error('Unknown responseType'));
+      // Check if fetch is available
+      if (typeof fetch !== 'undefined') {
+        try {
+          const response = await fetch(url);
+          if (responseType === 'json') {
+            const jsonData = await response.json();
+            callback(null, jsonData);
+          } else if (responseType === 'arraybuffer') {
+            const arrayBuffer = await response.arrayBuffer();
+            callback(null, arrayBuffer);
+          } else {
+            callback(new Error('Unknown responseType'));
+          }
+        } catch (e) {
+          callback(e);
         }
-      } catch (err) {
-        callback(err);
+      } else {
+        // Fallback to XMLHttpRequest if fetch is not available
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.responseType = responseType;
+  
+        xhr.onload = function (e) {
+          if (xhr.response) {
+            callback && callback(null, xhr.response);
+          } else {
+            callback(new Error('Failed to load response'));
+          }
+        };
+  
+        xhr.onerror = function () {
+          callback(new Error('Network error'));
+        };
+  
+        xhr.send(null);
       }
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = responseType;
-
-      xhr.onload = function (e) {
-        if (xhr.response) {
-          callback && callback(null, xhr.response);
-        }
-      };
-
-      xhr.send(null);
     },
+  
     extend: function() {
       const result = {};
       for (let i = 0; i < arguments.length; i++) {
         for (const key in arguments[i]) {
-          result[key] = arguments[i][key];
+          if (arguments[i].hasOwnProperty(key)) {
+            result[key] = arguments[i][key];
+          }
         }
       }
       return result;
     }
   };
+
   return Az;
 }));
 
