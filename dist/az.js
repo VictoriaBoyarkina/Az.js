@@ -8,61 +8,34 @@
     const fs = require('fs-web');
   }
 
-  var Az = {
+  const Az = {
     load: async function(url, responseType, callback) {
-      if (fs) {
-        try {
-          const response = await fetch(url);
-          if (responseType == 'json') {
-            const jsonData = await response.json();
-            // console.log('JSON File Contents:', jsonData);
-            callback(null, jsonData);
-          } else if (responseType == 'arraybuffer') {
-            const arrayBuffer = await response.arrayBuffer();
-              if (arrayBuffer) {
-                callback(null, arrayBuffer);
-              } else {
-                console.log('???')
-                var ab = new ArrayBuffer(response);
-                var view = new Uint8Array(ab);
-                for (var i = 0; i < response.length; ++i) {
-                    view[i] = response[i];
-                }
-                callback(null, ab);
-              }
-            } else {
-            callback(new Error('Unknown responseType'));
-          }
-        } catch (e) {
-          callback(err);
-            return;
+      try {
+        const response = await fetch(url);
+        if (responseType === 'json') {
+          const jsonData = await response.json();
+          callback(null, jsonData);
+        } else if (responseType === 'arraybuffer') {
+          const arrayBuffer = await response.arrayBuffer();
+          callback(null, arrayBuffer);
+        } else {
+          callback(new Error('Unknown responseType'));
         }
-        return;
+      } catch (err) {
+        callback(err);
       }
-
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = responseType;
-
-      xhr.onload = function (e) {
-        if (xhr.response) {
-          callback && callback(null, xhr.response);
-        }
-      };
-
-      xhr.send(null);
     },
+  
     extend: function() {
-      var result = {};
-      for (var i = 0; i < arguments.length; i++) {
-        for (var key in arguments[i]) {
+      const result = {};
+      for (let i = 0; i < arguments.length; i++) {
+        for (const key in arguments[i]) {
           result[key] = arguments[i][key];
         }
       }
       return result;
     }
   };
-
   return Az;
 }));
 
@@ -1551,24 +1524,30 @@
     loading++;
     Az.load(path + '/paradigms.array', 'arraybuffer', function(err, data) {
       if (err) {
-        callback(err);
+        console.error('Error loading data:', err);
         return;
       }
-      
-      var list = new Uint16Array(data),
-          count = list[0],
-          pos = 1;
-
-      paradigms = [];
-      for (var i = 0; i < count; i++) {
-        var size = list[pos++];
-        paradigms.push(list.subarray(pos, pos + size));
-        pos += size;
+      try {
+        const list = new Uint16Array(data);
+        const count = list[0];
+        const pos = 1;
+    
+        console.log('List:', list);
+        console.log('Count:', count);
+        console.log('Pos:', pos);
+    
+        paradigms = [];
+        for (var i = 0; i < count; i++) {
+          var size = list[pos++];
+          paradigms.push(list.subarray(pos, pos + size));
+          pos += size;
+        }
+        loaded();
+      } catch (e) {
+        console.error('Error processing data:', e);
       }
-      loaded();
     });
   }
-
   return Morph;
 }));
 
